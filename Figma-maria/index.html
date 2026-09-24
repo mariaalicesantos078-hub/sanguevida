@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SangueVida</title>
+  <style>
+    :root {
+      --red-primary: #d93030;
+      --cyan-accent: #00a8e8;
+      --bg-gray: #b0b0b0;
+      --bg-app: #e0e0e0;
+      --white: #ffffff;
+      --dark-text: #222222;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-app);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .mobile-frame {
+      width: 320px;
+      height: 580px;
+      background-color: var(--bg-gray);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .screen {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .header {
+      background-color: var(--red-primary);
+      color: var(--white);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .drop-icon {
+      width: 32px;
+      height: 42px;
+      background-color: var(--red-primary);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pulse-line {
+      width: 100%;
+      height: 2px;
+      background-color: var(--cyan-accent);
+    }
+
+    .brand-title {
+      color: var(--red-primary);
+      font-size: 20px;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .brand-subtitle {
+      color: var(--cyan-accent);
+      font-size: 9px;
+      letter-spacing: 0.5px;
+      font-weight: bold;
+    }
+
+    .btn-red {
+      background-color: var(--red-primary);
+      color: var(--white);
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-red:hover {
+      opacity: 0.9;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 14px;
+      background-color: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background-color: var(--cyan-accent);
+      transition: width 0.3s ease;
+    }
+
+    .step-text {
+      color: var(--cyan-accent);
+      font-weight: bold;
+      font-size: 14px;
+      align-self: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .question-box {
+      background-color: var(--red-primary);
+      color: var(--white);
+      padding: 20px 15px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 1.4;
+      margin-bottom: 25px;
+      width: 100%;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .btn-choice {
+      background-color: var(--red-primary);
+      color: var(--white);
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .form-group {
+      text-align: left;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--dark-text);
+      margin-bottom: 2px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 13px;
+    }
+
+    .radio-group {
+      text-align: left;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .footer-bar {
+      height: 35px;
+      background-color: var(--red-primary);
+      width: 100%;
+    }
+
+    .bottom-logo {
+      border-top: 1px solid var(--cyan-accent);
+      padding-top: 10px;
+      margin-top: auto;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-frame">
+
+    <div id="screen-splash" class="screen active">
+      <div class="header">
+        <span>SangueVida</span>
+      </div>
+      <div class="content" style="gap: 30px;">
+        <div class="logo-container">
+          <div class="drop-icon">
+            <div class="pulse-line"></div>
+          </div>
+          <div>
+            <div class="brand-title">SangueVida</div>
+            <div class="brand-subtitle">CENTRAL DIGITAL DE DOAÇÃO</div>
+          </div>
+        </div>
+        <button class="btn-red" onclick="goTo('screen-home')">ENTRAR</button>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+
+    <div id="screen-home" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="goTo('screen-splash')">&larr;</button>
+        <span>Página Inicial</span>
+      </div>
+      <div class="content" style="justify-content: space-between;">
+        <div style="margin-top: auto; margin-bottom: auto; width: 100%;">
+          <h2 style="color: var(--cyan-accent); font-size: 22px; margin-bottom: 25px;">DOE SANGUE,<br>SALVE VIDAS!</h2>
+          <button class="btn-red" onclick="goTo('screen-triage')">Agendar Doação</button>
+        </div>
+        <div class="bottom-logo">
+          <div class="logo-container">
+            <div class="drop-icon"><div class="pulse-line"></div></div>
+            <div>
+              <div class="brand-title">SangueVida</div>
+              <div class="brand-subtitle">CENTRAL DIGITAL DE DOAÇÃO</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-triage" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="goTo('screen-home')">&larr;</button>
+        <span>Pré Triagem</span>
+      </div>
+      <div class="content" style="justify-content: flex-start; padding-top: 15px;">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: 75%;"></div>
+        </div>
+        <div class="step-text">3 de 4</div>
+        
+        <div class="question-box">
+          Você pesa mais de 50 kg e tem entre 16 e 69 anos?
+        </div>
+
+        <div class="btn-group">
+          <button class="btn-choice" onclick="answerTriage(true)">sim</button>
+          <button class="btn-choice" onclick="answerTriage(false)">não</button>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+
+    <div id="screen-schedule" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="goTo('screen-triage')">&larr;</button>
+        <span>Agendamento</span>
+      </div>
+      <div class="content" style="justify-content: space-between; padding-top: 15px;">
+        <div style="width: 100%;">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 100%;"></div>
+          </div>
+          <div class="step-text">4 de 4</div>
+
+          <form id="booking-form" onsubmit="generateTicket(event)">
+            <div class="form-group">
+              <label>Nome:</label>
+              <input type="text" id="input-name" required placeholder="Seu nome completo">
+            </div>
+            <div class="form-group">
+              <label>CPF:</label>
+              <input type="text" id="input-cpf" required placeholder="000.000.000-00">
+            </div>
+            <div class="form-group">
+              <label>Celular:</label>
+              <input type="tel" id="input-phone" required placeholder="(00) 00000-0000">
+            </div>
+
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="donation_type" value="Sangue Total" checked>
+                <span>Sangue Total</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="donation_type" value="Plaquetas">
+                <span>Plaquetas</span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label>Data:</label>
+              <input type="date" id="input-date" value="2023-10-20" required>
+            </div>
+            <div class="form-group">
+              <label>Hora:</label>
+              <input type="time" id="input-time" value="09:00" required>
+            </div>
+
+            <button type="submit" class="btn-red" style="margin-top: 10px; font-size: 12px;">CONFIRMAR E GERAR TICKET</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+
+    function goTo(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function answerTriage(isEligible) {
+      if (isEligible) {
+        goTo('screen-schedule');
+      } else {
+        alert("Infelizmente, para doar sangue é necessário ter entre 16 e 69 anos e pesar mais de 50 kg.");
+      }
+    }
+
+    function generateTicket(e) {
+      e.preventDefault();
+      const name = document.getElementById('input-name').value;
+      const date = document.getElementById('input-date').value;
+      const time = document.getElementById('input-time').value;
+      const type = document.querySelector('input[name="donation_type"]:checked').value;
+
+      alert(`✅ Agendamento Confirmado!\n\nNome: ${name}\nTipo: ${type}\nData: ${date} às ${time}\n\nO seu ticket foi gerado com sucesso.`);
+      goTo('screen-home');
+    }
+  </script>
+
+</body>
+</html>
